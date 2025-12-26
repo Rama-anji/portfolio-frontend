@@ -1,0 +1,108 @@
+import Button from "../components/ui/Button";
+import Container from "../components/ui/Container";
+import Reveal from "../components/common/Reveal";
+import TypeText from "../components/common/TypeText";
+import heroImage from "../assets/images/anjaneyulu-hero.png";
+
+export default function Hero() {
+  return (
+    <section
+      id="home"
+      className="relative overflow-x-hidden bg-gradient-to-br from-brand-50 via-brand-100 to-brand-200"
+    >
+      {/* BACKGROUND DECOR (SAFE) */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-32 -left-32 w-[420px] h-[420px] bg-brand-200/25 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-[360px] h-[360px] bg-brand-300/20 rounded-full blur-3xl" />
+      </div>
+
+      <Container>
+        {/*
+          Layout rules:
+          - Mobile & Tablet: centered stack
+          - Desktop: 2 columns
+        */}
+        <div
+          className="
+            flex flex-col items-center text-center
+            lg:grid lg:grid-cols-2 lg:items-center lg:text-left
+            gap-16
+
+            py-20
+            md:min-h-[80vh] md:justify-center
+            lg:min-h-[80vh] lg:py-0
+          "
+        >
+          {/* LEFT CONTENT */}
+          <div className="flex flex-col items-center lg:items-start">
+            <Reveal>
+              <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
+                Hi, I’m{" "}
+                <span className="text-brand-500">Anjaneyulu</span>
+                <br />
+
+                {/* FIXED TYPING LINE — NO SHIFT ON ANY SCREEN */}
+                <span
+                  className="
+                    block text-slate-800
+
+                    /* LOCK HEIGHT & WIDTH (ALL DEVICES) */
+                    h-[1.4em]
+                    min-w-[260px]
+                    sm:min-w-[300px]
+                    md:min-w-[340px]
+
+                    overflow-hidden
+                    whitespace-nowrap
+
+                    /* LEFT ALIGN ALWAYS */
+                    text-left
+                    self-start
+                  "
+                >
+                  <TypeText text="Full Stack Developer" />
+                </span>
+              </h1>
+            </Reveal>
+
+            <Reveal delay={0.15}>
+              <p className="mt-6 max-w-2xl text-lg text-slate-700 leading-relaxed">
+               I build modern, scalable, and SEO-friendly web applications using React, Node.js, Fast API and secure backend architectures—focused on clean UI, high performance, and real business impact.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.25}>
+              <div className="mt-10 flex flex-wrap justify-center lg:justify-start gap-4">
+                <Button href="#projects">View Projects</Button>
+
+                {/* SECOND BUTTON – BLACK TEXT */}
+               <Button href="#contact" className="text-blue-600 border border-blue-300 hover:bg-blue-50">
+                  Contact Me
+               </Button>
+
+              </div>
+            </Reveal>
+          </div>
+
+          {/* RIGHT IMAGE */}
+          <Reveal delay={0.2}>
+            <div className="flex justify-center lg:justify-end">
+              <img
+                src={heroImage}
+                alt="Anjaneyulu Frontend Developer"
+                className="
+                  w-full
+                  max-w-sm
+                  md:max-w-md
+                  lg:max-w-md
+                  max-h-[420px]
+                  object-contain
+                "
+              />
+            </div>
+          </Reveal>
+        </div>
+      </Container>
+    </section>
+  );
+}

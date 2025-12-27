@@ -33,47 +33,60 @@ export default function FloatingActions() {
   }, [messages, typing]);
 
   /* WebSocket */
-  useEffect(() => {
-    if (!showChat || socketRef.current) return;
+useEffect(() => {
+  if (!showChat || socketRef.current) return;
 
-    const ws = new WebSocket("wss://portfolio-backend-9ne1.onrender.com/ws/chat");
-    socketRef.current = ws;
+  const ws = new WebSocket("wss://portfolio-backend-9ne1.onrender.com/ws/chat");
+  socketRef.current = ws;
 
-    ws.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (data.reply) {
-        setTyping(false);
-        setMessages((prev) => [
-          ...prev,
-          { from: "bot", text: data.reply }
-        ]);
-      }
-    };
+  ws.onopen = () => {
+    console.log("✅ WebSocket connected");
+  };
 
-    ws.onerror = () => {
+  ws.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    if (data.reply) {
       setTyping(false);
-      setMessages((prev) => [
-        ...prev,
-        { from: "bot", text: "⚠️ Connection issue. Please try again." }
-      ]);
-    };
+      setMessages((prev) => [...prev, { from: "bot", text: data.reply }]);
+    }
+  };
 
-    return () => {
-      ws.close();
-      socketRef.current = null;
-    };
-  }, [showChat]);
+  ws.onerror = () => {
+    console.error("❌ WebSocket error");
+    setTyping(false);
+    setMessages((prev) => [
+      ...prev,
+      { from: "bot", text: "⚠️ Connection error. Try again." }
+    ]);
+  };
+
+  ws.onclose = () => {
+    console.warn("🔌 WebSocket closed");
+  };
+
+  return () => {
+    ws.close();
+    socketRef.current = null;
+  };
+}, [showChat]);
+
 
   /* Send message */
-  const sendMessage = () => {
-    if (!input.trim() || !socketRef.current) return;
+const sendMessage = () => {
+  if (!input.trim()) return;
 
-    setMessages((prev) => [...prev, { from: "user", text: input }]);
-    setTyping(true);
+  if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+    console.warn("WebSocket not ready");
+    return;
+  }
 
-    socketRef.current.send(JSON.stringify({ message: input }));
-    setInput("");
-  };
+  setMessages((prev) => [...prev, { from: "user", text: input }]);
+  setTyping(true);
+
+  socketRef.current.send(JSON.stringify({ message: input }));
+  setInput("");
+};
+
 
   return (
     <>

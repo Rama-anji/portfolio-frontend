@@ -36,7 +36,7 @@ export default function FloatingActions() {
   useEffect(() => {
     if (!showChat || socketRef.current) return;
 
-    const ws = new WebSocket("ws://127.0.0.1:8000/ws/chat");
+    const ws = new WebSocket("wss://portfolio-backend-9ne1.onrender.com/ws/chat");
     socketRef.current = ws;
 
     ws.onmessage = (e) => {
